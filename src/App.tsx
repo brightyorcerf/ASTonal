@@ -127,7 +127,7 @@ class AudioEngine {
 /* ═══════════════════════════════════════════════════════════════
    THREE.JS
 ═══════════════════════════════════════════════════════════════ */
-const ORBIT_COLORS: number[] = [0xFFFFFF, 0xc44dff, 0xFFFFFF, 0xFFFFFF, 0xff8c42];
+const ORBIT_COLORS: number[] = [0xff6eb4, 0xc44dff, 0x5599ff, 0xffd700, 0xff8c42];
 const depthColor = (d: number): number => ORBIT_COLORS[d % ORBIT_COLORS.length];
 
 function getPlatonicGeo(k: number): THREE.BufferGeometry {
@@ -258,37 +258,38 @@ export default function ASTonal() {
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(W, H);
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-    renderer.setClearColor(0x141414);
+    renderer.setClearColor(0x0a0a0a);
     el.appendChild(renderer.domElement);
     rendRef.current = renderer;
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.Fog(0x141414, 35, 95);
+    scene.fog = new THREE.Fog(0x0a0a0a, 18, 50);
     const cam = new THREE.PerspectiveCamera(55, W / H, .1, 100);
     cam.position.set(0, 0, 10);
 
-    const p1 = new THREE.PointLight(0xdcf4ff, 1.8, 32); p1.position.set(6, 6, 5); scene.add(p1);
+    scene.add(new THREE.AmbientLight(0x111111, 0.7));
+    const p1 = new THREE.PointLight(0xff6eb4, 2.2, 30); p1.position.set(6, 6, 5); scene.add(p1);
     const p2 = new THREE.PointLight(0xc44dff, 1.6, 28); p2.position.set(-5, -5, 4); scene.add(p2);
-    const p3 = new THREE.PointLight(0xdcf4ff, 0.6, 25); p3.position.set(0, 4, -3); scene.add(p3);
-    const p4 = new THREE.PointLight(0xFFFFFF, 0.7, 18); p4.position.set(-3, -6, 2); scene.add(p4);
+    const p3 = new THREE.PointLight(0xffd700, 0.9, 22); p3.position.set(0, 4, -3); scene.add(p3);
+    const p4 = new THREE.PointLight(0x5599ff, 1.0, 24); p4.position.set(-3, -6, 2); scene.add(p4);
 
     const sp = new Float32Array(2200 * 3);
     for (let i = 0; i < sp.length; i++) sp[i] = (Math.random() - .5) * 90;
     const starGeo = new THREE.BufferGeometry();
     starGeo.setAttribute('position', new THREE.BufferAttribute(sp, 3));
-    const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0x3d1a2a, size: .065 }));
+    const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0x1a1a1a, size: .065 }));
     scene.add(stars);
 
     const ig = new THREE.Group();
-    ig.add(new THREE.Mesh(new THREE.IcosahedronGeometry(2.4, 0), new THREE.MeshBasicMaterial({ color: 0xFFFFFF, wireframe: true, transparent: true, opacity: .07 })));
-    ig.add(new THREE.Mesh(new THREE.OctahedronGeometry(1.4, 0), new THREE.MeshBasicMaterial({ color: 0xc44dff, wireframe: true, transparent: true, opacity: .05 })));
-    const innerMesh = new THREE.Mesh(new THREE.OctahedronGeometry(.4), new THREE.MeshPhongMaterial({ color: 0xFFFFFF, emissive: 0xFFFFFF, emissiveIntensity: 1.2 }));
+    ig.add(new THREE.Mesh(new THREE.IcosahedronGeometry(2.4, 0), new THREE.MeshBasicMaterial({ color: 0xff6eb4, wireframe: true, transparent: true, opacity: .07 })));
+    ig.add(new THREE.Mesh(new THREE.OctahedronGeometry(1.4, 0), new THREE.MeshBasicMaterial({ color: 0x5599ff, wireframe: true, transparent: true, opacity: .05 })));
+    const innerMesh = new THREE.Mesh(new THREE.OctahedronGeometry(.4), new THREE.MeshPhongMaterial({ color: 0xff6eb4, emissive: 0xff6eb4, emissiveIntensity: 1.2 }));
     ig.add(innerMesh);
-    const ring1 = new THREE.Mesh(new THREE.TorusGeometry(1.45, .015, 6, 80), new THREE.MeshBasicMaterial({ color: 0xc44dff, transparent: true, opacity: .35 }));
+    const ring1 = new THREE.Mesh(new THREE.TorusGeometry(1.45, .015, 6, 80), new THREE.MeshBasicMaterial({ color: 0x5599ff, transparent: true, opacity: .32 }));
     ring1.rotation.x = Math.PI / 4; ig.add(ring1);
-    const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.0, .012, 6, 80), new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: .2 }));
+    const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.0, .012, 6, 80), new THREE.MeshBasicMaterial({ color: 0xffd700, transparent: true, opacity: .2 }));
     ring2.rotation.x = -Math.PI / 3; ring2.rotation.y = Math.PI / 5; ig.add(ring2);
-    const ring3 = new THREE.Mesh(new THREE.TorusGeometry(1.1, .01, 6, 60), new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: .22 }));
+    const ring3 = new THREE.Mesh(new THREE.TorusGeometry(1.1, .01, 6, 60), new THREE.MeshBasicMaterial({ color: 0xff6eb4, transparent: true, opacity: .2 }));
     ring3.rotation.z = Math.PI / 6; ig.add(ring3);
     scene.add(ig); idleGrp.current = ig;
 
@@ -437,24 +438,26 @@ export default function ASTonal() {
   }, [url]);
 
   // ── palette ─────────────────────────────────────────────────
-  // sakura #FFFFFF · cobalt #FFFFFF · gold #FFFFFF
+  // sakura #ff6eb4  → CTA, errors, 4xx, interactive
+  // cobalt #5599ff  → labels, info, 3xx, fast timing
+  // gold   #ffd700  → success, 2xx, AST data, highlights
   const statusColor = (s: number): string => {
-    if (s >= 200 && s < 300) return '#FFFFFF';   // gold
-    if (s >= 300 && s < 400) return '#FFFFFF';   // cobalt
-    if (s >= 400) return '#FFFFFF';   // sakura
-    return '#444444';
+    if (s >= 200 && s < 300) return '#ffd700';  // gold  — success
+    if (s >= 300 && s < 400) return '#5599ff';  // cobalt — redirect
+    if (s >= 400) return '#ff6eb4';             // sakura — error
+    return '#555';
   };
 
   const busy = (['fetching', 'parsing', 'building'] as Phase[]).includes(phase);
   const sc = tele ? statusColor(tele.status) : null;
 
   const PHASE_COLOR: Record<Phase, string> = {
-    idle: '#333', validating: '#FFFFFF', fetching: '#FFFFFF',
-    parsing: '#FFFFFF', building: '#FFFFFF', done: '#FFFFFF', error: '#FFFFFF',
+    idle: '#2e2e2e', validating: '#5599ff', fetching: '#5599ff',
+    parsing: '#ffd700', building: '#ff6eb4', done: '#ffd700', error: '#ff6eb4',
   };
 
   /* ─────────────────────────────────────────────────────────────
-     RENDER  — jet black · sakura · cobalt · gold
+     RENDER
   ───────────────────────────────────────────────────────────── */
   return (
     <div style={{
@@ -467,88 +470,98 @@ export default function ASTonal() {
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:ital,wght@0,400;0,700&display=swap');
         *{box-sizing:border-box;}
         ::-webkit-scrollbar{width:3px;}
-        ::-webkit-scrollbar-thumb{background:#222;border-radius:3px;}
-        ::-webkit-scrollbar-thumb:hover{background:#333;}
+        ::-webkit-scrollbar-thumb{background:#1e1e1e;border-radius:3px;}
+        ::-webkit-scrollbar-thumb:hover{background:#2a2a2a;}
 
-        @keyframes spin        { to { transform: rotate(360deg) } }
-        @keyframes pulse       { 0%,100%{opacity:1} 50%{opacity:.25} }
-        @keyframes shimmer-move{ 0%,100%{transform:translateX(-110%)} 50%{transform:translateX(110%)} }
+        @keyframes spin         { to { transform: rotate(360deg) } }
+        @keyframes pulse        { 0%,100%{opacity:1} 50%{opacity:.18} }
+        @keyframes shimmer-move { 0%,100%{transform:translateX(-110%)} 50%{transform:translateX(110%)} }
+        @keyframes logo-breathe { 0%,100%{filter:drop-shadow(0 0 3px #ff6eb4)} 50%{filter:drop-shadow(0 0 9px #ff6eb4)} }
+        @keyframes float        { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-5px)} }
 
-        .url-input { transition: border-color .15s !important; }
+        .url-input { transition: border-color .15s, box-shadow .15s; }
         .url-input:focus {
-          border-color: #FFFFFF !important;
+          border-color: #5599ff !important;
           outline: none;
-          box-shadow: 0 0 0 2px rgba(255,110,180,.15) !important;
+          box-shadow: 0 0 0 2px rgba(85,153,255,.12) !important;
         }
 
-        .preset-chip { transition: all .14s ease !important; cursor: pointer; }
-        .preset-chip:hover {
-          border-color: #FFFFFF !important;
-          color: #FFFFFF !important;
-        }
-        .preset-chip.active {
-          border-color: #FFFFFF !important;
-          color: #FFFFFF !important;
-        }
+        .preset-chip { transition: border-color .12s, color .12s, background .12s; cursor: pointer; }
+        .preset-chip:hover  { border-color: #5599ff !important; color: #5599ff !important; }
+        .preset-chip.active { border-color: #5599ff !important; color: #5599ff !important; background: rgba(85,153,255,.07) !important; }
 
-        .analyze-btn {
-          position: relative; overflow: hidden;
-          transition: opacity .15s, transform .15s !important;
-        }
-        .analyze-btn:not(:disabled):hover { opacity: .88; transform: translateY(-1px); }
+        .analyze-btn { position: relative; overflow: hidden; transition: opacity .15s, transform .15s; }
+        .analyze-btn:not(:disabled):hover  { opacity: .86; transform: translateY(-1px); }
         .analyze-btn:not(:disabled):active { transform: translateY(0); opacity: 1; }
         .btn-shimmer {
           position: absolute; inset: 0;
-          background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.18) 50%, transparent 65%);
+          background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.22) 50%, transparent 65%);
           pointer-events: none;
-          animation: shimmer-move 4s ease infinite;
         }
 
-        .hdr-toggle:hover { border-color: #FFFFFF !important; color: #FFFFFF !important; }
+        .hdr-toggle { transition: border-color .12s, color .12s; }
+        .hdr-toggle:hover { border-color: #5599ff !important; color: #5599ff !important; }
+
         .stat-row { border-radius: 3px; transition: background .1s; }
-        .stat-row:hover { background: #141414; }
+        .stat-row:hover { background: #111; }
+
         .canvas-wrap { cursor: crosshair; }
         .canvas-wrap:active { cursor: grabbing; }
+
+        .section-label {
+          display: flex; align-items: center; gap: 6px;
+          font-size: 7.5px; letter-spacing: 2.5px; font-weight: 700; text-transform: uppercase;
+        }
+        .section-label::before {
+          content: ''; display: inline-block;
+          width: 2px; height: 9px; border-radius: 2px; flex-shrink: 0;
+        }
+        .label-cobalt { color: #5599ff; }
+        .label-cobalt::before { background: #5599ff; }
+        .label-gold   { color: #ffd700; }
+        .label-gold::before   { background: #ffd700; }
       `}</style>
 
       {/* HEADER */}
       <header style={{
-        display: 'flex', alignItems: 'center', gap: 14, padding: '0 24px',
+        display: 'flex', alignItems: 'center', gap: 12, padding: '0 20px',
         height: 52, flexShrink: 0,
-        borderBottom: '1px solid #1a1a1a',
+        borderBottom: '1px solid #141414',
         background: '#0A0A0A',
       }}>
-        <div style={{ color: '#FFFFFF', fontSize: 18, lineHeight: 1 }}>◈</div>
+        <div style={{ animation: 'logo-breathe 3s ease-in-out infinite', color: '#ff6eb4', fontSize: 17, lineHeight: 1, flexShrink: 0 }}>◈</div>
 
         <div style={{
           fontFamily: "'Orbitron',sans-serif",
-          fontSize: 13, fontWeight: 900, letterSpacing: 4,
-          background: 'linear-gradient(90deg, #FFFFFF, #FFFFFF)',
+          fontSize: 12, fontWeight: 900, letterSpacing: 4,
+          background: 'linear-gradient(90deg, #ff6eb4 0%, #ffd700 100%)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+          flexShrink: 0,
         }}>ASTONAL</div>
 
-        <div style={{ fontSize: 10, color: '#333', letterSpacing: 1 }}>
-          API Telemetry · AST Geometry · Sonic Synthesis
+        <div style={{ width: 1, height: 14, background: '#1e1e1e', flexShrink: 0 }} />
+
+        <div style={{ fontSize: 9, color: '#2a2a2a', letterSpacing: .8, fontFamily: "'JetBrains Mono',monospace" }}>
+          api · ast · audio
         </div>
 
         <div style={{ flex: 1 }} />
 
-        {/* Phase indicator */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <span style={{
-            width: 6, height: 6, borderRadius: '50%', display: 'inline-block',
+            width: 5, height: 5, borderRadius: '50%', display: 'inline-block', flexShrink: 0,
             background: PHASE_COLOR[phase],
-            boxShadow: `0 0 6px ${PHASE_COLOR[phase]}`,
-            animation: busy ? 'pulse .8s ease-in-out infinite' : undefined,
+            boxShadow: `0 0 8px ${PHASE_COLOR[phase]}`,
+            animation: busy ? 'pulse .7s ease-in-out infinite' : undefined,
           }} />
           <span style={{
-            fontSize: 10, fontWeight: 600, letterSpacing: 1,
+            fontSize: 9, fontWeight: 700, letterSpacing: 1.5,
             color: PHASE_COLOR[phase],
             fontFamily: "'Orbitron',sans-serif",
-          }}>{phase.toUpperCase()}</span>
+          }}>{phase}</span>
         </div>
 
-        <div style={{ fontSize: 9, color: '#2a2a2a', letterSpacing: 1, marginLeft: 8 }}>US-EAST</div>
+        <div style={{ fontSize: 8, color: '#1a1a1a', letterSpacing: 1, marginLeft: 10, fontFamily: "'JetBrains Mono',monospace" }}>us-east</div>
       </header>
 
       {/* MAIN */}
@@ -560,34 +573,35 @@ export default function ASTonal() {
           className="canvas-wrap"
           onMouseDown={onMouseDown} onMouseMove={onMouseMove}
           onMouseUp={onMouseUp} onMouseLeave={onMouseUp}
-          style={{ flex: '1 1 62%', position: 'relative', overflow: 'hidden', borderRight: '1px solid #1a1a1a', minHeight: 300 }}
+          style={{ flex: '1 1 62%', position: 'relative', overflow: 'hidden', borderRight: '1px solid #141414', minHeight: 300 }}
         >
-          <div style={{ position: 'absolute', inset: 0, background: bgTint, pointerEvents: 'none', zIndex: 1, transition: 'background 1.2s ease' }} />
+          <div style={{ position: 'absolute', inset: 0, background: bgTint, pointerEvents: 'none', zIndex: 1, transition: 'background 1.4s ease' }} />
 
-          {/* Corner accents */}
+          {/* Corner brackets — sakura TL, cobalt TR, gold BL+BR */}
           {([
-            { top: 12, left: 12, borderTop: '1px solid #FFFFFF', borderLeft: '1px solid #FFFFFF' },
-            { top: 12, right: 12, borderTop: '1px solid #FFFFFF', borderRight: '1px solid #FFFFFF' },
-            { bottom: 12, left: 12, borderBottom: '1px solid #FFFFFF', borderLeft: '1px solid #FFFFFF' },
-            { bottom: 12, right: 12, borderBottom: '1px solid #FFFFFF', borderRight: '1px solid #FFFFFF' },
+            { top: 10, left: 10,   borderTop: '1.5px solid #ff6eb4', borderLeft: '1.5px solid #ff6eb4' },
+            { top: 10, right: 10,  borderTop: '1.5px solid #5599ff', borderRight: '1.5px solid #5599ff' },
+            { bottom: 10, left: 10,  borderBottom: '1.5px solid #ffd700', borderLeft: '1.5px solid #ffd700' },
+            { bottom: 10, right: 10, borderBottom: '1.5px solid #ffd700', borderRight: '1.5px solid #ffd700' },
           ] as React.CSSProperties[]).map((s, i) => (
-            <div key={i} style={{ position: 'absolute', width: 14, height: 14, pointerEvents: 'none', zIndex: 3, ...s }} />
+            <div key={i} style={{ position: 'absolute', width: 16, height: 16, pointerEvents: 'none', zIndex: 3, ...s }} />
           ))}
 
           {phase === 'idle' && (
             <div style={{
-              position: 'absolute', bottom: 20, left: '50%', transform: 'translateX(-50%)',
+              position: 'absolute', bottom: 22, left: '50%',
               zIndex: 4, pointerEvents: 'none', whiteSpace: 'nowrap',
-              fontSize: 9, letterSpacing: 3.5, color: '#FFFFFF',
-              fontFamily: "'Orbitron',sans-serif",
-              animation: 'pulse 2.5s ease-in-out infinite',
-            }}>AWAITING ENDPOINT</div>
+              animation: 'float 2.8s ease-in-out infinite',
+              fontSize: 8, letterSpacing: 4, color: '#ff6eb4',
+              fontFamily: "'Orbitron',sans-serif", opacity: .65,
+            }}>◦ awaiting endpoint ◦</div>
           )}
 
           {phase === 'done' && (
             <div style={{
-              position: 'absolute', bottom: 14, left: 16, zIndex: 4, pointerEvents: 'none',
-              fontSize: 9, color: '#333', letterSpacing: 1.5,
+              position: 'absolute', bottom: 14, left: 14, zIndex: 4, pointerEvents: 'none',
+              fontSize: 8, color: '#2a2a2a', letterSpacing: 2,
+              fontFamily: "'JetBrains Mono',monospace",
             }}>drag to rotate</div>
           )}
 
@@ -595,18 +609,15 @@ export default function ASTonal() {
             <div style={{
               position: 'absolute', inset: 0, zIndex: 5, pointerEvents: 'none',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              background: 'rgba(10,10,10,.7)', backdropFilter: 'blur(4px)',
+              background: 'rgba(10,10,10,.72)', backdropFilter: 'blur(3px)',
             }}>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ position: 'relative', width: 44, height: 44, margin: '0 auto 12px' }}>
-                  <div style={{ position: 'absolute', inset: 0, border: '1.5px solid transparent', borderTop: `1.5px solid #FFFFFF`, borderRadius: '50%', animation: 'spin .65s linear infinite' }} />
-                  <div style={{ position: 'absolute', inset: 8, border: '1.5px solid transparent', borderTop: `1.5px solid #FFFFFF`, borderRadius: '50%', animation: 'spin 1s linear infinite reverse' }} />
-                  <div style={{ position: 'absolute', inset: 16, border: '1px solid transparent', borderTop: `1px solid #FFFFFF`, borderRadius: '50%', animation: 'spin 1.5s linear infinite' }} />
+                <div style={{ position: 'relative', width: 42, height: 42, margin: '0 auto 14px' }}>
+                  <div style={{ position: 'absolute', inset: 0,  border: '1.5px solid #141414', borderTop: '1.5px solid #ff6eb4', borderRadius: '50%', animation: 'spin .6s linear infinite' }} />
+                  <div style={{ position: 'absolute', inset: 7,  border: '1.5px solid #141414', borderTop: '1.5px solid #5599ff', borderRadius: '50%', animation: 'spin .95s linear infinite reverse' }} />
+                  <div style={{ position: 'absolute', inset: 14, border: '1px solid #141414',   borderTop: '1px solid #ffd700',  borderRadius: '50%', animation: 'spin 1.45s linear infinite' }} />
                 </div>
-                <div style={{
-                  fontFamily: "'Orbitron',sans-serif", fontSize: 8,
-                  letterSpacing: 2.5, color: '#FFFFFF',
-                }}>{phase.toUpperCase()}</div>
+                <div style={{ fontFamily: "'Orbitron',sans-serif", fontSize: 7, letterSpacing: 3, color: PHASE_COLOR[phase] }}>{phase}</div>
               </div>
             </div>
           )}
@@ -614,16 +625,14 @@ export default function ASTonal() {
 
         {/* RIGHT PANEL */}
         <div style={{
-          width: 292, flexShrink: 0, display: 'flex', flexDirection: 'column',
+          width: 288, flexShrink: 0, display: 'flex', flexDirection: 'column',
           background: '#0A0A0A', overflow: 'hidden',
         }}>
-          <div style={{ flex: 1, overflowY: 'auto', padding: '16px 16px 12px' }}>
+          <div style={{ flex: 1, overflowY: 'auto', padding: '18px 16px 14px' }}>
 
             {/* URL input */}
-            <div style={{ marginBottom: 14 }}>
-              <div style={{ fontSize: 9, fontWeight: 700, color: '#FFFFFF', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 6 }}>
-                Target Endpoint
-              </div>
+            <div style={{ marginBottom: 16 }}>
+              <div className="section-label label-cobalt" style={{ marginBottom: 7 }}>Target Endpoint</div>
               <input
                 className="url-input"
                 value={url}
@@ -631,28 +640,27 @@ export default function ASTonal() {
                 onKeyDown={e => e.key === 'Enter' && void analyze()}
                 placeholder="https://api.example.com/data"
                 style={{
-                  width: '100%', background: '#111', border: '1px solid #222',
-                  borderRadius: 6, padding: '8px 10px',
-                  fontSize: 11, color: '#e8e8e8',
+                  width: '100%', background: '#0d0d0d', border: '1px solid #1e1e1e',
+                  borderRadius: 5, padding: '8px 10px',
+                  fontSize: 10.5, color: '#e8e8e8',
                   fontFamily: "'JetBrains Mono','Courier New',monospace",
+                  outline: 'none',
                 }}
               />
             </div>
 
             {/* Presets */}
-            <div style={{ marginBottom: 16 }}>
-              <div style={{ fontSize: 9, fontWeight: 700, color: '#FFFFFF', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 6 }}>
-                Presets
-              </div>
+            <div style={{ marginBottom: 16, paddingBottom: 16, borderBottom: '1px solid #141414' }}>
+              <div className="section-label label-cobalt" style={{ marginBottom: 8 }}>Presets</div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
                 {PRESETS.map(p => (
                   <button key={p.url} onClick={() => setUrl(p.url)}
                     className={`preset-chip${url === p.url ? ' active' : ''}`}
                     style={{
-                      background: 'transparent',
-                      border: `1px solid ${url === p.url ? '#FFFFFF' : '#222'}`,
-                      color: url === p.url ? '#FFFFFF' : '#444',
-                      fontSize: 11, padding: '4px 10px', borderRadius: 5,
+                      background: url === p.url ? 'rgba(85,153,255,.07)' : 'transparent',
+                      border: `1px solid ${url === p.url ? '#5599ff' : '#1e1e1e'}`,
+                      color: url === p.url ? '#5599ff' : '#444',
+                      fontSize: 10, padding: '4px 10px', borderRadius: 4,
                       fontFamily: 'inherit',
                     }}>
                     {p.name}
@@ -661,33 +669,33 @@ export default function ASTonal() {
               </div>
             </div>
 
-            {/* Button */}
+            {/* Analyze button */}
             <button
               ref={btnRef}
               onClick={() => void analyze()}
               disabled={busy}
               className="analyze-btn"
               style={{
-                width: '100%', padding: '11px',
-                background: busy ? '#111' : '#FFFFFF',
-                border: 'none', borderRadius: 7,
-                color: busy ? '#444' : '#0A0A0A',
+                width: '100%', padding: '11px 16px',
+                background: busy ? '#111' : '#ff6eb4',
+                border: 'none', borderRadius: 6,
+                color: busy ? '#333' : '#0A0A0A',
                 fontFamily: "'Orbitron',sans-serif",
-                fontSize: 9, letterSpacing: 2.5, fontWeight: 900,
+                fontSize: 8.5, letterSpacing: 2.5, fontWeight: 900,
                 cursor: busy ? 'not-allowed' : 'pointer',
-                marginBottom: 16,
+                marginBottom: 18,
               }}>
               <span className="btn-shimmer" />
-              {busy ? `${phase.toUpperCase()}...` : 'CONNECT & ANALYZE'}
+              {busy ? `${phase}...` : 'connect & analyze'}
             </button>
 
             {/* Error */}
             {err && (
               <div ref={errRef} style={{
-                padding: '9px 11px', borderRadius: 6, marginBottom: 14,
-                border: '1px solid #FFFFFF', borderLeft: '3px solid #FFFFFF',
-                fontSize: 11, color: '#FFFFFF', lineHeight: 1.6,
-                background: 'rgba(255,110,180,.05)',
+                padding: '9px 11px', borderRadius: 5, marginBottom: 16,
+                border: '1px solid rgba(255,110,180,.28)', borderLeft: '2px solid #ff6eb4',
+                background: 'rgba(255,110,180,.04)',
+                fontSize: 10.5, color: '#ff6eb4', lineHeight: 1.6,
               }}>✕ {err}</div>
             )}
 
@@ -695,92 +703,94 @@ export default function ASTonal() {
             {tele && (
               <div ref={teleRef}>
 
-                {/* Status */}
+                {/* Status hero */}
                 <div style={{
-                  marginBottom: 14, paddingBottom: 14,
-                  borderBottom: '1px solid #1a1a1a',
+                  marginBottom: 16, paddingBottom: 14,
+                  borderBottom: '1px solid #141414',
+                  borderTop: `2px solid ${sc!}`,
+                  paddingTop: 12,
+                  background: `linear-gradient(180deg, ${sc!}09 0%, transparent 55%)`,
+                  marginLeft: -16, marginRight: -16, paddingLeft: 16, paddingRight: 16,
                 }}>
                   <div ref={statusNumRef} style={{
                     fontFamily: "'Orbitron',sans-serif",
-                    fontSize: 52, fontWeight: 900, lineHeight: 1,
+                    fontSize: 56, fontWeight: 900, lineHeight: 1,
                     color: sc!, letterSpacing: 1,
+                    fontVariantNumeric: 'tabular-nums',
                   }}>{tele.status || 'ERR'}</div>
-                  <div style={{ fontSize: 12, color: '#e8e8e8', marginTop: 4, fontWeight: 500 }}>{tele.statusText}</div>
-                  <div style={{ fontSize: 9, color: '#333', marginTop: 3, letterSpacing: .5 }}>
-                    {tele.redirected ? '↪ redirected' : 'direct response'}
+                  <div style={{ fontSize: 11, color: '#888', marginTop: 5, fontWeight: 500 }}>{tele.statusText}</div>
+                  <div style={{ fontSize: 8.5, color: '#2e2e2e', marginTop: 3, fontFamily: "'JetBrains Mono',monospace" }}>
+                    {tele.redirected ? '↪ redirected' : '↳ direct response'}
                   </div>
                 </div>
 
                 {/* Timing */}
-                <div style={{ marginBottom: 14, paddingBottom: 14, borderBottom: '1px solid #1a1a1a' }}>
-                  <div style={{ fontSize: 9, fontWeight: 700, color: '#FFFFFF', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 10 }}>Timing</div>
-                  {([['TTFB', tele.timing.ttfb], ['Total', tele.timing.total]] as [string, number][]).map(([label, val]) => (
-                    <div key={label} style={{ marginBottom: 8 }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                        <span style={{ fontSize: 10, color: '#444' }}>{label}</span>
-                        <span style={{
-                          fontSize: 11, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700,
-                          color: val > 1200 ? '#FFFFFF' : val > 500 ? '#FFFFFF' : '#FFFFFF',
-                        }}>{val}<span style={{ fontSize: 9, fontWeight: 400, color: '#333' }}> ms</span></span>
+                <div style={{ marginBottom: 16, paddingBottom: 14, borderBottom: '1px solid #141414' }}>
+                  <div className="section-label label-cobalt" style={{ marginBottom: 10 }}>Timing</div>
+                  {([['TTFB', tele.timing.ttfb], ['Total', tele.timing.total]] as [string, number][]).map(([label, val]) => {
+                    const barColor = val > 1200 ? '#ff6eb4' : val > 500 ? '#ffd700' : '#5599ff';
+                    return (
+                      <div key={label} style={{ marginBottom: 9 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 5 }}>
+                          <span style={{ fontSize: 9, color: '#3e3e3e', letterSpacing: .5 }}>{label}</span>
+                          <span style={{ fontSize: 11, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, color: barColor, fontVariantNumeric: 'tabular-nums' }}>
+                            {val}<span style={{ fontSize: 8.5, fontWeight: 400, color: '#2e2e2e', marginLeft: 2 }}>ms</span>
+                          </span>
+                        </div>
+                        <div style={{ height: 3, background: '#141414', borderRadius: 2, overflow: 'hidden' }}>
+                          <div style={{ height: '100%', borderRadius: 2, width: `${Math.min(val / 2000, 1) * 100}%`, background: barColor, transition: 'width .9s cubic-bezier(.34,1.2,.64,1)' }} />
+                        </div>
                       </div>
-                      <div style={{ height: 3, background: '#1a1a1a', borderRadius: 2 }}>
-                        <div style={{
-                          height: '100%', borderRadius: 2,
-                          width: `${Math.min(val / 2000, 1) * 100}%`,
-                          background: val > 1200 ? '#FFFFFF' : val > 500 ? '#FFFFFF' : '#FFFFFF',
-                          transition: 'width .8s cubic-bezier(.34,1.2,.64,1)',
-                        }} />
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
-                {/* AST */}
+                {/* AST geometry */}
                 {astInfo && (
-                  <div ref={astRef} style={{ marginBottom: 14, paddingBottom: 14, borderBottom: '1px solid #1a1a1a' }}>
-                    <div style={{ fontSize: 9, fontWeight: 700, color: '#FFFFFF', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 10 }}>AST Geometry</div>
+                  <div ref={astRef} style={{ marginBottom: 16, paddingBottom: 14, borderBottom: '1px solid #141414' }}>
+                    <div className="section-label label-gold" style={{ marginBottom: 10 }}>AST Geometry</div>
                     {([
-                      ['Root type', astInfo.type, '#FFFFFF'],
-                      ['Total nodes', String(astInfo.nodes), '#FFFFFF'],
-                      ['Max depth', String(astInfo.depth), '#FFFFFF'],
-                    ] as [string, string, string][]).map(([l, v, c]) => (
-                      <div key={l} className="stat-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 5px', marginBottom: 1 }}>
-                        <span style={{ fontSize: 10, color: '#444' }}>{l}</span>
-                        <span style={{ fontSize: 11, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, color: c }}>{v}</span>
+                      ['Root type', astInfo.type],
+                      ['Total nodes', String(astInfo.nodes)],
+                      ['Max depth', String(astInfo.depth)],
+                    ] as [string, string][]).map(([l, v]) => (
+                      <div key={l} className="stat-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 6px', marginBottom: 1 }}>
+                        <span style={{ fontSize: 9.5, color: '#3e3e3e' }}>{l}</span>
+                        <span style={{ fontSize: 11, fontFamily: "'JetBrains Mono',monospace", fontWeight: 700, color: '#ffd700' }}>{v}</span>
                       </div>
                     ))}
                   </div>
                 )}
 
-                {/* Content type */}
+                {/* Content-type token */}
                 {tele.contentType && (
-                  <div style={{ fontSize: 9.5, color: '#333', marginBottom: 14 }}>
-                    <span style={{ color: '#444' }}>content-type </span>
-                    <span style={{ fontFamily: "'JetBrains Mono',monospace", color: '#FFFFFF' }}>{tele.contentType.split(';')[0]}</span>
+                  <div style={{ marginBottom: 14, padding: '5px 8px', borderRadius: 4, background: '#0d0d0d', border: '1px solid #141414', display: 'inline-flex', gap: 6, alignItems: 'center' }}>
+                    <span style={{ fontSize: 7.5, color: '#2e2e2e', letterSpacing: 1, textTransform: 'uppercase' }}>type</span>
+                    <span style={{ fontSize: 9.5, fontFamily: "'JetBrains Mono',monospace", color: '#555' }}>{tele.contentType.split(';')[0]}</span>
                   </div>
                 )}
 
-                {/* Headers accordion */}
+                {/* Headers */}
                 {tele.headers.length > 0 && (
-                  <div style={{ marginBottom: 12 }}>
+                  <div style={{ marginBottom: 14 }}>
                     <button onClick={() => setHdOpen(o => !o)} className="hdr-toggle"
                       style={{
                         width: '100%', background: 'transparent',
-                        border: '1px solid #222', borderRadius: 5,
+                        border: '1px solid #1a1a1a', borderRadius: 4,
                         padding: '7px 10px',
                         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                        fontSize: 10, color: '#444', cursor: 'pointer',
+                        fontSize: 9.5, color: '#3e3e3e', cursor: 'pointer',
                         fontFamily: 'inherit',
                       }}>
-                      <span>headers <span style={{ color: '#FFFFFF' }}>({tele.headers.length})</span></span>
-                      <span style={{ transform: hdOpen ? 'rotate(180deg)' : 'none', transition: '.2s', color: '#FFFFFF' }}>▾</span>
+                      <span>response headers <span style={{ color: '#5599ff' }}>({tele.headers.length})</span></span>
+                      <span style={{ transform: hdOpen ? 'rotate(180deg)' : 'none', transition: '.22s', color: '#5599ff', fontSize: 11 }}>▾</span>
                     </button>
                     {hdOpen && (
-                      <div style={{ border: '1px solid #1a1a1a', borderTop: 'none', borderRadius: '0 0 5px 5px', maxHeight: 150, overflowY: 'auto', padding: '8px 10px' }}>
+                      <div style={{ border: '1px solid #141414', borderTop: 'none', borderRadius: '0 0 4px 4px', maxHeight: 150, overflowY: 'auto', padding: '8px 10px', background: '#0d0d0d' }}>
                         {tele.headers.map(([k, v]) => (
-                          <div key={k} style={{ marginBottom: 6 }}>
-                            <div style={{ fontSize: 9, color: '#333', letterSpacing: .3 }}>{k}</div>
-                            <div style={{ fontSize: 10, color: '#555', wordBreak: 'break-all', fontFamily: "'JetBrains Mono',monospace" }}>{v.slice(0, 90)}</div>
+                          <div key={k} style={{ marginBottom: 7 }}>
+                            <div style={{ fontSize: 8.5, color: '#2a2a2a' }}>{k}</div>
+                            <div style={{ fontSize: 9.5, color: '#4a4a4a', wordBreak: 'break-all', fontFamily: "'JetBrains Mono',monospace" }}>{v.slice(0, 90)}</div>
                           </div>
                         ))}
                       </div>
@@ -788,37 +798,42 @@ export default function ASTonal() {
                   </div>
                 )}
 
-                {/* Network error */}
+                {/* Network error note */}
                 {tele.error && (
-                  <div style={{ padding: '8px 10px', borderRadius: 5, border: '1px solid #FFFFFF', borderLeft: '3px solid #FFFFFF', fontSize: 10, color: '#FFFFFF', lineHeight: 1.6, background: 'rgba(255,215,0,.04)' }}>
+                  <div style={{
+                    padding: '9px 11px', borderRadius: 5,
+                    border: '1px solid rgba(255,215,0,.22)', borderLeft: '2px solid #ffd700',
+                    background: 'rgba(255,215,0,.03)',
+                    fontSize: 10, color: '#ffd700', lineHeight: 1.65,
+                  }}>
                     ⚠ {tele.status === 408
-                      ? 'Timed out after 12s. Server may be slow or unreachable.'
-                      : 'Could not reach endpoint. Network error, DNS failure, or TLS issue.'}
+                      ? 'Timed out after 14s. Server may be slow or unreachable.'
+                      : 'Could not reach endpoint. Check network, DNS, or TLS.'}
                   </div>
                 )}
               </div>
             )}
           </div>
 
-          {/* Audio bar */}
-          <div style={{ padding: '8px 16px', borderTop: '1px solid #1a1a1a', display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+          {/* Audio footer */}
+          <div style={{ padding: '8px 16px', borderTop: '1px solid #141414', display: 'flex', alignItems: 'center', gap: 9, flexShrink: 0 }}>
             {audioOn ? (
               <>
-                <div style={{ display: 'flex', alignItems: 'flex-end', gap: 2, height: 12 }}>
-                  {[1, .6, .9, .4, .75].map((h, i) => (
+                <div style={{ display: 'flex', alignItems: 'flex-end', gap: 2, height: 13, flexShrink: 0 }}>
+                  {[1, .55, .85, .45, .7].map((h, i) => (
                     <span key={i} style={{
                       display: 'inline-block', width: 2, borderRadius: 1,
-                      background: i % 2 === 0 ? '#FFFFFF' : '#FFFFFF',
-                      height: `${h * 12}px`,
-                      animation: `pulse ${.6 + i * .12}s ease-in-out infinite`,
-                      animationDelay: `${i * .1}s`,
+                      height: `${h * 13}px`,
+                      background: i % 2 === 0 ? '#ff6eb4' : '#ffd700',
+                      animation: `pulse ${.55 + i * .13}s ease-in-out infinite`,
+                      animationDelay: `${i * .09}s`,
                     }} />
                   ))}
                 </div>
-                <span style={{ fontSize: 9.5, color: '#FFFFFF', letterSpacing: .3 }}>audio active · fft reactive</span>
+                <span style={{ fontSize: 9, color: '#5599ff', letterSpacing: .3 }}>audio active · fft reactive</span>
               </>
             ) : (
-              <span style={{ fontSize: 9.5, color: '#2a2a2a' }}>audio initializes on first analyze</span>
+              <span style={{ fontSize: 9, color: '#1e1e1e' }}>audio initializes on first analyze</span>
             )}
           </div>
         </div>
@@ -826,12 +841,12 @@ export default function ASTonal() {
 
       {/* FOOTER */}
       <footer style={{
-        padding: '6px 24px', borderTop: '1px solid #1a1a1a',
+        padding: '5px 20px', borderTop: '1px solid #141414',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         flexShrink: 0, background: '#0A0A0A',
       }}>
-        <span style={{ fontSize: 9, color: '#2a2a2a' }}>Telemetry via Vercel Edge Network (US-East)</span>
-        <span style={{ fontSize: 9, color: '#FFFFFF', fontWeight: 700, letterSpacing: 1 }}>ASTONAL v1.0</span>
+        <span style={{ fontSize: 8.5, color: '#1e1e1e' }}>Telemetry via Vercel Edge Network (US-East)</span>
+        <span style={{ fontSize: 8, color: '#ffd700', fontWeight: 700, letterSpacing: 1.5, fontFamily: "'Orbitron',sans-serif" }}>ASTONAL v1.0</span>
       </footer>
     </div>
   );
