@@ -15,7 +15,7 @@ import type {
    cobalt   #FFFFFF
    gold     #FFFFFF
    orange   #ff8c42
-   bg       #0A0A0A
+   bg       #000000
    surface  #FFFFFF   (barely-there purple tint)
    border   #ede8f8
    ink      #1a0a2e
@@ -136,7 +136,7 @@ class AudioEngine {
 /* ═══════════════════════════════════════════════════════════════
    THREE.JS
 ═══════════════════════════════════════════════════════════════ */
-const ORBIT_COLORS: number[] = [0xff6eb4, 0xc44dff, 0x5599ff, 0x4cbb17, 0xff8c42];
+const ORBIT_COLORS: number[] = [0xffffff, 0xc44dff, 0x5599ff, 0x4cbb17, 0xff8c42];
 const depthColor = (d: number): number => ORBIT_COLORS[d % ORBIT_COLORS.length];
 
 function getPlatonicGeo(k: number): THREE.BufferGeometry {
@@ -246,9 +246,9 @@ export default function ASTonal() {
 
   useEffect(() => {
     const s = tele?.status ?? 0;
-    if (s >= 200 && s < 300) spectrumColorRef.current = { r: 255, g: 215, b: 0 };
+    if (s >= 200 && s < 300) spectrumColorRef.current = { r: 76, g: 187, b: 23 };
     else if (s >= 300 && s < 400) spectrumColorRef.current = { r: 85, g: 153, b: 255 };
-    else if (s >= 400) spectrumColorRef.current = { r: 255, g: 110, b: 180 };
+    else if (s >= 400) spectrumColorRef.current = { r: 255, g: 255, b: 255 };
     else spectrumColorRef.current = { r: 85, g: 153, b: 255 };
   }, [tele]);
 
@@ -278,17 +278,17 @@ export default function ASTonal() {
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(W, H);
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-    renderer.setClearColor(0x0a0a0a);
+    renderer.setClearColor(0x000000);
     el.appendChild(renderer.domElement);
     rendRef.current = renderer;
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.Fog(0x0a0a0a, 18, 50);
+    scene.fog = new THREE.Fog(0x000000, 18, 50);
     const cam = new THREE.PerspectiveCamera(55, W / H, .1, 100);
     cam.position.set(0, 0, 10);
 
     scene.add(new THREE.AmbientLight(0x111111, 0.7));
-    const p1 = new THREE.PointLight(0xff6eb4, 2.2, 30); p1.position.set(6, 6, 5); scene.add(p1);
+    const p1 = new THREE.PointLight(0xffffff, 2.2, 30); p1.position.set(6, 6, 5); scene.add(p1);
     const p2 = new THREE.PointLight(0xc44dff, 1.6, 28); p2.position.set(-5, -5, 4); scene.add(p2);
     const p3 = new THREE.PointLight(0x4cbb17, 0.9, 22); p3.position.set(0, 4, -3); scene.add(p3);
     const p4 = new THREE.PointLight(0x5599ff, 1.0, 24); p4.position.set(-3, -6, 2); scene.add(p4);
@@ -301,15 +301,15 @@ export default function ASTonal() {
     scene.add(stars);
 
     const ig = new THREE.Group();
-    ig.add(new THREE.Mesh(new THREE.IcosahedronGeometry(2.4, 0), new THREE.MeshBasicMaterial({ color: 0xff6eb4, wireframe: true, transparent: true, opacity: .07 })));
+    ig.add(new THREE.Mesh(new THREE.IcosahedronGeometry(2.4, 0), new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: .07 })));
     ig.add(new THREE.Mesh(new THREE.OctahedronGeometry(1.4, 0), new THREE.MeshBasicMaterial({ color: 0x5599ff, wireframe: true, transparent: true, opacity: .05 })));
-    const innerMesh = new THREE.Mesh(new THREE.OctahedronGeometry(.4), new THREE.MeshPhongMaterial({ color: 0xff6eb4, emissive: 0xff6eb4, emissiveIntensity: 1.2 }));
+    const innerMesh = new THREE.Mesh(new THREE.OctahedronGeometry(.4), new THREE.MeshPhongMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: 1.2 }));
     ig.add(innerMesh);
     const ring1 = new THREE.Mesh(new THREE.TorusGeometry(1.45, .015, 6, 80), new THREE.MeshBasicMaterial({ color: 0x5599ff, transparent: true, opacity: .32 }));
     ring1.rotation.x = Math.PI / 4; ig.add(ring1);
     const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.0, .012, 6, 80), new THREE.MeshBasicMaterial({ color: 0x4cbb17, transparent: true, opacity: .2 }));
     ring2.rotation.x = -Math.PI / 3; ring2.rotation.y = Math.PI / 5; ig.add(ring2);
-    const ring3 = new THREE.Mesh(new THREE.TorusGeometry(1.1, .01, 6, 60), new THREE.MeshBasicMaterial({ color: 0xff6eb4, transparent: true, opacity: .2 }));
+    const ring3 = new THREE.Mesh(new THREE.TorusGeometry(1.1, .01, 6, 60), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: .2 }));
     ring3.rotation.z = Math.PI / 6; ig.add(ring3);
     scene.add(ig); idleGrp.current = ig;
 
@@ -458,9 +458,9 @@ export default function ASTonal() {
       const audioSeed = (res.body.length ^ Math.round(res.timing.ttfb * 3.7)) & 0xFF;
       audioRef.current.playForStatus(res.status, audioSeed);
 
-      if (res.status >= 200 && res.status < 300) setBgTint('rgba(255,215,0,.06)');
+      if (res.status >= 200 && res.status < 300) setBgTint('rgba(76,187,23,.06)');
       else if (res.status >= 300 && res.status < 400) setBgTint('rgba(85,153,255,.06)');
-      else if (res.status >= 400 && res.status < 500) setBgTint('rgba(255,110,180,.07)');
+      else if (res.status >= 400 && res.status < 500) setBgTint('rgba(255,255,255,.07)');
       else if (res.status >= 500) setBgTint('rgba(255,140,66,.07)');
       else setBgTint('transparent');
 
@@ -470,13 +470,18 @@ export default function ASTonal() {
         const rid = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
         const graph = await new Promise<OrbitalGraph | null>(resolve => {
           const w = workerRef.current!;
+          let tid: ReturnType<typeof setTimeout>;
           const handler = (e: MessageEvent<WorkerOutboundMessage>) => {
             if (e.data.rid !== rid) return;
+            clearTimeout(tid);
             w.removeEventListener('message', handler);
             resolve(e.data.type === 'AST_RESULT' ? e.data.graph : null);
           };
           w.addEventListener('message', handler);
-          setTimeout(() => resolve(null), 6_000);
+          tid = setTimeout(() => {
+            w.removeEventListener('message', handler);
+            resolve(null);
+          }, 6_000);
           const msg: WorkerInboundMessage = { type: 'PARSE_JSON', payload: rawBody, rid };
           w.postMessage(msg);
         });
@@ -491,13 +496,13 @@ export default function ASTonal() {
   }, [url]);
 
   // ── palette ─────────────────────────────────────────────────
-  // sakura #ff6eb4  → CTA, errors, 4xx, interactive
+  // sakura #ffffff  → CTA, errors, 4xx, interactive
   // cobalt #5599ff  → labels, info, 3xx, fast timing
   // gold   #4cbb17  → success, 2xx, AST data, highlights
   const statusColor = (s: number): string => {
     if (s >= 200 && s < 300) return '#4cbb17';  // gold  — success
     if (s >= 300 && s < 400) return '#5599ff';  // cobalt — redirect
-    if (s >= 400) return '#ff6eb4';             // sakura — error
+    if (s >= 400) return '#ffffff';             // sakura — error
     return '#555';
   };
 
@@ -506,7 +511,7 @@ export default function ASTonal() {
 
   const PHASE_COLOR: Record<Phase, string> = {
     idle: '#2e2e2e', validating: '#5599ff', fetching: '#5599ff',
-    parsing: '#4cbb17', building: '#ff6eb4', done: '#4cbb17', error: '#ff6eb4',
+    parsing: '#4cbb17', building: '#ffffff', done: '#4cbb17', error: '#ffffff',
   };
 
   /* ─────────────────────────────────────────────────────────────
@@ -514,7 +519,7 @@ export default function ASTonal() {
   ───────────────────────────────────────────────────────────── */
   return (
     <div style={{
-      width: '100vw', height: '100vh', background: '#0A0A0A',
+      width: '100vw', height: '100vh', background: '#000000',
       display: 'flex', flexDirection: 'column', overflow: 'hidden',
       fontFamily: "-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue',system-ui,sans-serif",
       color: '#e8e8e8',
@@ -529,7 +534,7 @@ export default function ASTonal() {
         @keyframes spin         { to { transform: rotate(360deg) } }
         @keyframes pulse        { 0%,100%{opacity:1} 50%{opacity:.18} }
         @keyframes shimmer-move { 0%,100%{transform:translateX(-110%)} 50%{transform:translateX(110%)} }
-        @keyframes logo-breathe { 0%,100%{filter:drop-shadow(0 0 3px #ff6eb4)} 50%{filter:drop-shadow(0 0 9px #ff6eb4)} }
+        @keyframes logo-breathe { 0%,100%{filter:drop-shadow(0 0 3px #ffffff)} 50%{filter:drop-shadow(0 0 9px #ffffff)} }
         @keyframes float        { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-5px)} }
 
         .url-input { transition: border-color .15s, box-shadow .15s; }
@@ -580,14 +585,14 @@ export default function ASTonal() {
         display: 'flex', alignItems: 'center', gap: 12, padding: '0 20px',
         height: 52, flexShrink: 0,
         borderBottom: '1px solid #141414',
-        background: '#0A0A0A',
+        background: '#000000',
       }}>
-        <div style={{ animation: 'logo-breathe 3s ease-in-out infinite', color: '#ff6eb4', fontSize: 17, lineHeight: 1, flexShrink: 0 }}>◈</div>
+        <div style={{ animation: 'logo-breathe 3s ease-in-out infinite', color: '#ffffff', fontSize: 17, lineHeight: 1, flexShrink: 0 }}>◈</div>
 
         <div style={{
           fontFamily: "'Orbitron',sans-serif",
           fontSize: 12, fontWeight: 900, letterSpacing: 4,
-          background: 'linear-gradient(90deg, #ff6eb4 0%, #4cbb17 100%)',
+          background: 'linear-gradient(90deg, #ffffff 0%, #4cbb17 100%)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
           flexShrink: 0,
         }}>ASTONAL</div>
@@ -632,7 +637,7 @@ export default function ASTonal() {
 
           {/* Corner brackets — sakura TL, cobalt TR, gold BL+BR */}
           {([
-            { top: 10, left: 10,   borderTop: '1.5px solid #ff6eb4', borderLeft: '1.5px solid #ff6eb4' },
+            { top: 10, left: 10,   borderTop: '1.5px solid #ffffff', borderLeft: '1.5px solid #ffffff' },
             { top: 10, right: 10,  borderTop: '1.5px solid #5599ff', borderRight: '1.5px solid #5599ff' },
             { bottom: 10, left: 10,  borderBottom: '1.5px solid #4cbb17', borderLeft: '1.5px solid #4cbb17' },
             { bottom: 10, right: 10, borderBottom: '1.5px solid #4cbb17', borderRight: '1.5px solid #4cbb17' },
@@ -659,7 +664,7 @@ export default function ASTonal() {
               position: 'absolute', bottom: 22, left: '50%',
               zIndex: 4, pointerEvents: 'none', whiteSpace: 'nowrap',
               animation: 'float 2.8s ease-in-out infinite',
-              fontSize: 8, letterSpacing: 4, color: '#ff6eb4',
+              fontSize: 8, letterSpacing: 4, color: '#ffffff',
               fontFamily: "'Orbitron',sans-serif", opacity: .65,
             }}>◦ awaiting endpoint ◦</div>
           )}
@@ -680,7 +685,7 @@ export default function ASTonal() {
             }}>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ position: 'relative', width: 42, height: 42, margin: '0 auto 14px' }}>
-                  <div style={{ position: 'absolute', inset: 0,  border: '1.5px solid #141414', borderTop: '1.5px solid #ff6eb4', borderRadius: '50%', animation: 'spin .6s linear infinite' }} />
+                  <div style={{ position: 'absolute', inset: 0,  border: '1.5px solid #141414', borderTop: '1.5px solid #ffffff', borderRadius: '50%', animation: 'spin .6s linear infinite' }} />
                   <div style={{ position: 'absolute', inset: 7,  border: '1.5px solid #141414', borderTop: '1.5px solid #5599ff', borderRadius: '50%', animation: 'spin .95s linear infinite reverse' }} />
                   <div style={{ position: 'absolute', inset: 14, border: '1px solid #141414',   borderTop: '1px solid #4cbb17',  borderRadius: '50%', animation: 'spin 1.45s linear infinite' }} />
                 </div>
@@ -693,7 +698,7 @@ export default function ASTonal() {
         {/* RIGHT PANEL */}
         <div style={{
           width: 288, flexShrink: 0, display: 'flex', flexDirection: 'column',
-          background: '#0A0A0A', overflow: 'hidden',
+          background: '#000000', overflow: 'hidden',
         }}>
           <div style={{ flex: 1, overflowY: 'auto', padding: '18px 16px 14px' }}>
 
@@ -744,9 +749,9 @@ export default function ASTonal() {
               className="analyze-btn"
               style={{
                 width: '100%', padding: '11px 16px',
-                background: busy ? '#111' : '#ff6eb4',
+                background: busy ? '#111' : '#ffffff',
                 border: 'none', borderRadius: 6,
-                color: busy ? '#333' : '#0A0A0A',
+                color: busy ? '#333' : '#000000',
                 fontFamily: "'Orbitron',sans-serif",
                 fontSize: 8.5, letterSpacing: 2.5, fontWeight: 900,
                 cursor: busy ? 'not-allowed' : 'pointer',
@@ -760,9 +765,9 @@ export default function ASTonal() {
             {err && (
               <div ref={errRef} style={{
                 padding: '9px 11px', borderRadius: 5, marginBottom: 16,
-                border: '1px solid rgba(255,110,180,.28)', borderLeft: '2px solid #ff6eb4',
-                background: 'rgba(255,110,180,.04)',
-                fontSize: 10.5, color: '#ff6eb4', lineHeight: 1.6,
+                border: '1px solid rgba(255,255,255,.28)', borderLeft: '2px solid #ffffff',
+                background: 'rgba(255,255,255,.04)',
+                fontSize: 10.5, color: '#ffffff', lineHeight: 1.6,
               }}>✕ {err}</div>
             )}
 
@@ -795,7 +800,7 @@ export default function ASTonal() {
                 <div style={{ marginBottom: 16, paddingBottom: 14, borderBottom: '1px solid #141414' }}>
                   <div className="section-label label-cobalt" style={{ marginBottom: 10 }}>Timing</div>
                   {([['TTFB', tele.timing.ttfb], ['Total', tele.timing.total]] as [string, number][]).map(([label, val]) => {
-                    const barColor = val > 1200 ? '#ff6eb4' : val > 500 ? '#4cbb17' : '#5599ff';
+                    const barColor = val > 1200 ? '#ffffff' : val > 500 ? '#4cbb17' : '#5599ff';
                     return (
                       <div key={label} style={{ marginBottom: 9 }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 5 }}>
@@ -869,8 +874,8 @@ export default function ASTonal() {
                 {tele.error && (
                   <div style={{
                     padding: '9px 11px', borderRadius: 5,
-                    border: '1px solid rgba(255,215,0,.22)', borderLeft: '2px solid #4cbb17',
-                    background: 'rgba(255,215,0,.03)',
+                    border: '1px solid rgba(76,187,23,.22)', borderLeft: '2px solid #4cbb17',
+                    background: 'rgba(76,187,23,.03)',
                     fontSize: 10, color: '#4cbb17', lineHeight: 1.65,
                   }}>
                     ⚠ {tele.status === 408
@@ -891,7 +896,7 @@ export default function ASTonal() {
                     <span key={i} style={{
                       display: 'inline-block', width: 2, borderRadius: 1,
                       height: `${h * 13}px`,
-                      background: i % 2 === 0 ? '#ff6eb4' : '#4cbb17',
+                      background: i % 2 === 0 ? '#ffffff' : '#4cbb17',
                       animation: `pulse ${.55 + i * .13}s ease-in-out infinite`,
                       animationDelay: `${i * .09}s`,
                     }} />
@@ -910,7 +915,7 @@ export default function ASTonal() {
       <footer style={{
         padding: '5px 20px', borderTop: '1px solid #141414',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        flexShrink: 0, background: '#0A0A0A',
+        flexShrink: 0, background: '#000000',
       }}>
         <span style={{ fontSize: 8.5, color: '#1e1e1e' }}>Telemetry via Vercel Edge Network (US-East)</span>
         <span style={{ fontSize: 8, color: '#4cbb17', fontWeight: 700, letterSpacing: 1.5, fontFamily: "'Orbitron',sans-serif" }}>ASTONAL v1.0</span>
