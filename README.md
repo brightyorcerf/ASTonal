@@ -1,6 +1,6 @@
-# astonal
+# Astonal
 
-> Audiovisual API profiler that turns JSON into 3d orbital graphs and HTTP health into generative music
+> An audiovisual API profiler that turns JSON into 3d orbital graphs and HTTP health into generative music
 
 Point it at any public API. The response body gets parsed into an Abstract Syntax Tree. That tree gets laid out as a three-dimensional orbital node graph in real-time WebGL. The HTTP status code gets expressed as a chord mode through the Web Audio API. Every request produces a unique audiovisual signature — different endpoints sound different, look different, every time.
 
@@ -10,7 +10,7 @@ No charting libraries. No audio frameworks. No UI component kits. Everything ren
 
 ---
 
-## stack
+## Stack
 
 | layer | technology | purpose |
 |---|---|---|
@@ -25,7 +25,7 @@ No charting libraries. No audio frameworks. No UI component kits. Everything ren
 
 ---
 
-## system architecture
+## System Architecture
 
 The system is partitioned across three execution environments. The main thread owns rendering and audio. A dedicated Web Worker owns all heavy compute. The server proxy owns all outbound network access. None of these boundaries are suggestions — they are hard architectural constraints.
 
@@ -72,7 +72,7 @@ The redirect policy is deliberate. `undici` is configured with `maxRedirections:
 
 ---
 
-## system telemetry & generative audio
+## System Telemetry & Generative Audio
 
 The telemetry layer measures three numbers that actually matter: time-to-first-byte, total response time, and HTTP status code. Those three numbers determine everything that happens next — the color scheme, the background tint, the audio profile, and whether the worker is invoked at all.
 
@@ -94,7 +94,7 @@ The spectrum visualizer is a 2D canvas element composited over the WebGL viewpor
 
 ---
 
-## terminal design system & crt visuals
+## Terminal design system & crt visuals
 
 The visual language is synthwave on black. One background color. Five semantic accent colors. No decorative gradients, no illustration, no iconography. Every visual element either communicates state or gets removed.
 
@@ -121,7 +121,7 @@ Typography splits across two families. Orbitron handles all identifiers — the 
 
 ---
 
-## physics-driven motion
+## Physics-driven motion
 
 GSAP runs four independent animation systems. They are isolated from each other and none of them interact with the Three.js render loop.
 
@@ -137,13 +137,13 @@ Every state transition has declared motion intent. The error panel enters from `
 
 ---
 
-## on building this
+## On building this
 
 The hardest problem was not the WebGL, not the audio synthesis, and not the worker thread boundary — it was a silent 4KB truncation in the proxy layer that cut response bodies mid-JSON and caused the worker to throw a `SyntaxError` with no visible upstream indication. The telemetry showed 200 OK, the timing looked normal, the headers arrived complete, and the orbital graph simply never appeared. Tracing that failure backward through the audio trigger, the worker timeout handler, the worker message contract, and finally to a `.slice(0, 4096)` call buried inside the undici body buffer taught us that every pipeline layer needs an explicit, documented size contract — not just the parser that consumes the data at the end. Raising both the Vite middleware and the Vercel function to 512KB and trusting the worker's own depth and child count limits as the correct complexity boundary fixed an entire class of silent failures at once. The future of astonal is authentication-aware profiling with header injection, a structural diff mode that overlays two orbital graphs simultaneously and renders divergence as geometric displacement, and a session recorder that captures a sequence of requests as an animated orbital timeline — the full story of how a system responds under real conditions, expressed entirely as geometry and sound.
 
 ---
 
-## running locally
+## Running Locally
 
 ```bash
 git clone https://github.com/brightyorcerf/astonal
@@ -158,22 +158,38 @@ For Vercel deployment, `api/telemetry.ts` is detected automatically as a serverl
 
 ---
 
-## compatible apis
+## Try it out!
 
 Any public HTTPS endpoint that returns JSON and responds within 12 seconds. No authentication, no API keys.
 
 ```
-https://pokeapi.co/api/v2/pokemon/ditto
-https://restcountries.com/v3.1/name/japan
-https://randomuser.me/api/
-https://catfact.ninja/fact
-https://wttr.in/London?format=j1
-https://hp-api.onrender.com/api/characters
-https://api.spacexdata.com/v4/launches/latest
-https://www.dnd5eapi.co/api/spells/fireball
-https://jsonplaceholder.typicode.com/users/1
+//every Pokémon Move
+https://pokeapi.co/api/v2/move/1
+
+//NASA Asteroid Tracker
+https://api.nasa.gov/neo/rest/v1/neo/3542519?api_key=DEMO_KEY
+
+//NASA Image Search
 https://images-api.nasa.gov/search?q=nebula&media_type=image
-https://universities.hipolabs.com/search?country=India
+
+//D&D Spell (Fireball)
+https://www.dnd5eapi.co/api/spells/fireball
+
+//detailed Weather Forecast
+https://wttr.in/Hyderabad?format=j1
+
+//random Fake User Profile
+https://randomuser.me/api/
+
+//random Dog Image
+https://dog.ceo/api/breeds/image/random
+
+//cat Facts
+https://catfact.ninja/fact
+
+//current Bitcoin Price
+https://api.coindesk.com/v1/bpi/currentprice.json
+
 ```
 
 HTTP endpoints are blocked at the client-side SSRF guard. Private IP ranges and cloud metadata endpoints are blocked at the server-side guard. Endpoints returning non-JSON bodies pass through telemetry normally — the orbital graph is skipped, the audio still fires.
