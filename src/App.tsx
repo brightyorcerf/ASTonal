@@ -183,10 +183,10 @@ function buildMeshesFromGraph(graph: OrbitalGraph, group: THREE.Group): void {
 const GRAIN_URL = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E\")";
 
 const PRESETS = [
-  { name: 'Post', url: 'https://jsonplaceholder.typicode.com/posts/1' },
-  { name: 'User', url: 'https://jsonplaceholder.typicode.com/users/1' },
   { name: 'Comments', url: 'https://jsonplaceholder.typicode.com/posts/1/comments' },
-  { name: 'HTTPBin', url: 'https://httpbin.org/json' },
+  { name: 'Asteroid', url: 'https://api.nasa.gov/neo/rest/v1/neo/3542519?api_key=DEMO_KEY' },
+  { name: 'Fireball', url: 'https://www.dnd5eapi.co/api/spells/fireball' },
+  { name: 'Redirect', url: 'https://httpbin.org/redirect/1' },
 ] as const;
 
 type Phase = 'idle' | 'validating' | 'fetching' | 'parsing' | 'building' | 'done' | 'error';
