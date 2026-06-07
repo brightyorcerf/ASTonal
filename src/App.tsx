@@ -551,9 +551,10 @@ export default function ASTonal() {
   // cobalt #5599ff  → labels, info, 3xx, fast timing
   // gold   #4cbb17  → success, 2xx, AST data, highlights
   const statusColor = (s: number): string => {
-    if (s >= 200 && s < 300) return '#4cbb17';  // gold  — success
+    if (s >= 200 && s < 300) return '#4cbb17';  // green  — success
     if (s >= 300 && s < 400) return '#5599ff';  // cobalt — redirect
-    if (s >= 400) return '#ffffff';             // sakura — error
+    if (s >= 400 && s < 500) return '#ffffff';  // white  — client error
+    if (s >= 500) return '#ff8c42';             // orange — server error
     return '#555';
   };
 
@@ -765,6 +766,7 @@ export default function ASTonal() {
           background: '#000000', overflow: 'hidden',
           boxShadow: sc === '#4cbb17' ? 'inset 4px 0 32px rgba(76,187,23,0.11)'
                    : sc === '#5599ff' ? 'inset 4px 0 32px rgba(85,153,255,0.11)'
+                   : sc === '#ff8c42' ? 'inset 4px 0 32px rgba(255,140,66,0.11)'
                    : sc              ? 'inset 4px 0 32px rgba(255,255,255,0.07)'
                    : 'none',
           transition: 'box-shadow 1.4s ease',
