@@ -1,10 +1,12 @@
 # astonal
 
-A network profiler that turns JSON into orbital geometry and HTTP status codes into synthesized sound.
+> Audiovisual API profiler that turns JSON into 3d orbital graphs and HTTP health into generative music
 
 Point it at any public API. The response body gets parsed into an Abstract Syntax Tree. That tree gets laid out as a three-dimensional orbital node graph in real-time WebGL. The HTTP status code gets expressed as a chord mode through the Web Audio API. Every request produces a unique audiovisual signature — different endpoints sound different, look different, every time.
 
 No charting libraries. No audio frameworks. No UI component kits. Everything rendered from scratch in React, Three.js, GSAP, and the Web Audio API.
+
+![img1](img1.png)
 
 ---
 
@@ -178,4 +180,8 @@ HTTP endpoints are blocked at the client-side SSRF guard. Private IP ranges and 
 
 ---
 
+![img3](img2.png)
+![img3](img3.png)
+
 `astonal v1.0 — telemetry via vercel edge network us-east`
+
