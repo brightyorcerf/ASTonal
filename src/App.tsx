@@ -186,7 +186,9 @@ const PRESETS = [
   { name: 'Comments', url: 'https://jsonplaceholder.typicode.com/posts/1/comments' },
   { name: 'Asteroid', url: 'https://api.nasa.gov/neo/rest/v1/neo/3542519?api_key=DEMO_KEY' },
   { name: 'Fireball', url: 'https://www.dnd5eapi.co/api/spells/fireball' },
-  { name: 'Redirect', url: 'https://httpbin.org/redirect/1' },
+  { name: 'Denied',   url: 'https://api.github.com/user' },
+  { name: 'Ghost',    url: 'https://api.github.com/repos/xyznotarealuserxyz/nothing' },
+  { name: 'Fault',    url: 'https://httpbin.org/status/500' },
 ] as const;
 
 type Phase = 'idle' | 'validating' | 'fetching' | 'parsing' | 'building' | 'done' | 'error';
